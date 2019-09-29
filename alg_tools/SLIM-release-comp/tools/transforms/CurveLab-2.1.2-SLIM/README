@@ -1,0 +1,47 @@
+Curvelab-2.1.2-SLIM - CurveLab with SLIM's FFT Functions + Other.
+(Read README.ORIG as well)
+____________________________________________
+
+Needed Programs:
+
+1. FFTW 3.1.2+
+	-> Used for fdct3d and fdct_wrapping_cpp, SLIM specific FFT functions.
+	-> http://www.fftw.org
+
+2. FFTW 2.1.5
+	-> Needed for the other CurveLab Libraries, especially fdct3d_mpi.
+	-> http://www.fftw.org
+
+3. PetSC-2.3.2 or newer (Optional)
+        -> Needed for fdct3d_mpi
+        -> http://www-unix.mcs.anl.gov/petsc/petsc-as/
+
+4. MATLAB
+        -> for MATLAB components
+____________________________________________
+
+Installation:
+
+1. Set FFTW3_DIR shell environment variable to the location of your FFTW (3.1.2)
+
+2. Set FFTW_DIR shell environment variable to the location of your FFTW (2.1.5)
+
+3. For non-MPI components:
+	-> Run "make" in fdct3d/src AND fdct_wrapping_cpp/src folders (Only FFTW 3.1.2 needed).
+	-> Run "make lib" in the main folder (Will produce errors if FFTW 2.1.5 folder (for default CurveLab functions) not set).
+
+4. For MPI components (if needed):
+        -> Set environment PETSC_DIR to home of PetSC installation
+        -> Run "make mpi" in the mail folder
+        -> Note printed PETSC_DIR and PETSC_ARCH (needed for MADAGASCAR compilation of SLIM MPI components))
+
+5. MATLAB (if needed):
+        -> Change MEX in makefile.opt and makefile.slim
+        -> Run "make matlab" in the main folder
+
+____________________________________________
+
+C. Brown, cbrown@eos.ubc.ca
+Seismic Laboratory for Imaging and Modeling
+Dept. of Earth and Ocean Sciences
+The University of British Columbia

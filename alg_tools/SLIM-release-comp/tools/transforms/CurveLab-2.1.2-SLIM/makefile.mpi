@@ -1,0 +1,45 @@
+# ----------------------------machine dependent file
+MODE = debug
+MODE = optim
+
+#include ${PETSC_DIR}/bmake/variables
+include ${PETSC_DIR}/bmake/common/variables
+
+# compiler and linker variable 
+INCLUDES =	-I${FFTW_DIR}/include ${PETSC_INCLUDE}
+
+LIBS = 		-L${FFTW_DIR}/lib -lfftw \
+	-Wl,-rpath,${PETSC_DIR}/lib/${PETSC_ARCH} ${PETSC_LIB}
+
+AR = ar
+ARFLAGS = -r
+
+CC  = mpicc
+CXX = mpicxx
+
+# Petsc related
+#ifeq ($(MODE),debug)	
+#	BOPT = g_c++
+#else
+#	BOPT = O_c++
+#endif
+
+PETSC_CXXFLAGS	=  -DPETSC_USE_DEBUG  -DPETSC_USE_LOG -DPETSC_USE_STACK 
+
+#CXXFLAGS = -MMD -fpermissive $(PETSC_CXXFLAGS) ${INCLUDES}
+CXXFLAGS = -MMD $(PETSC_CXXFLAGS) ${INCLUDES}
+
+ifeq ($(MODE),debug)
+        CXXFLAGS += -g
+else
+	CXXFLAGS += -O3
+#        CXXFLAGS += -DNDEBUG
+endif
+
+LDFLAGS = ${LIBS}
+
+RANLIB = ranlib
+
+# rules
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $*.cpp
