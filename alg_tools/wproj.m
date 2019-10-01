@@ -1,8 +1,8 @@
 function [L, R, w, obj_value] = wproj(b, params, projtype, sig, eta_factor)
 
+%
 err = 100; 
 eta = params.eta;
-% eta_factor = params.eta_fact;
 iter_crit = params.iter_crit;
 stop_crit = params.stop_crit;
 Ao = params.Ao; 
@@ -29,7 +29,6 @@ switch(params.method)
 end
 w = L*R';
 count = 0;  
-% werr = 0; 
 obj_value = norm(L*R', 'fro');
 bo = Ao*b(:); 
 for i = 1:iter_crit
@@ -83,9 +82,6 @@ for i = 1:iter_crit
                     else
                         z = v-bo;
                         [~, nind] = maxk2(z, sig, 'b'); 
-%                         [~, nind] = sort(z, 'descend'); 
-%                         nind = setdiff(1:numel(z), max_vals_ind); 
-%                         z(nind(sig+1:end)) = 0;
                         z(nind) = 0; 
                         w(obs) = z+bo;
                         feas = abs(numel(find(z~=0))-sig);
@@ -96,15 +92,12 @@ for i = 1:iter_crit
             if(mod(count, printevery)==0)
                 fprintf('%s batch: % d iter: %d, w-lr: %7.3f, feas: %7.3e, err: %7.3e\n',projtype, i, count, werr, feas, err);
             end
-            %err = [err,norm(w,2)];
             err = normest(Rold(:) - R(:)) + normest(Lold(:)-L(:)) + normest(wold(:) - w(:));
             count = count+1;
             switch(params.method)
                 case{'nondist'}
                     w = reshape(w, nrecx*nsrcx, nrecy*nsrcy); 
-%                     eta = eta*eta_factor; 
                 case{'2d'}
-%                     eta = eta*eta_factor;
                     w = reshape(w, numr, numc);
             end
    end
